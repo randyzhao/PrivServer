@@ -16,22 +16,18 @@ package randy;
 
 import hibernate.bean.UserInfo;
 import hibernate.dao.UserInfoDao;
+import htmlParser.HtmlParser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.htmlparser.util.ParserException;
 
 import wordAnalyzer.IWordAnalyzer;
 import wordAnalyzer.KAnalyzer;
@@ -62,6 +58,10 @@ public class ParseRequestAction extends ActionSupport {
 		HttpServletResponse response = ServletActionContext.getResponse();
 		log.info("Into doPost");
 		response.setContentType("text/html");
+		// Enumeration<String> en = request.getParameterNames();
+		// while (en.hasMoreElements()) {
+		// log.info(en.nextElement());
+		// }
 		String username = request.getParameter("un");
 		String passwordMd5 = request.getParameter("psmd5");
 		String url = request.getParameter("url");
@@ -111,7 +111,9 @@ public class ParseRequestAction extends ActionSupport {
 	private void handleRequest(String username, String url) {
 		try {
 			String content = this.getHttpContent(url);
+			log.info(content);
 			List<String> words = this.analyzer.analyze(content);
+			log.info(words);
 			UserInfoDao userInfoDao = new UserInfoDao();
 			UserInfo user = userInfoDao.getUserInfoByName(username);
 			if (user == null) {
@@ -131,16 +133,36 @@ public class ParseRequestAction extends ActionSupport {
 	}
 
 	private String getHttpContent(String url) throws IOException {
-		HttpClient client = new DefaultHttpClient();
-		HttpResponse res = client.execute(new HttpGet(url));
-		BufferedReader bf = new BufferedReader(new InputStreamReader(res
-				.getEntity().getContent()));
-		String line = null;
-		StringBuilder sb = new StringBuilder();
-		while ((line = bf.readLine()) != null) {
-			sb.append(line);
+		// HttpClient client = new DefaultHttpClient();
+		// HttpResponse res = client.execute(new HttpGet(url));
+		// BufferedReader bf = new BufferedReader(new InputStreamReader(res
+		// .getEntity().getContent()));
+		// String line = null;
+		// StringBuilder sb = new StringBuilder();
+		// while ((line = bf.readLine()) != null) {
+		// sb.append(line);
+		// }
+		// log.info("content: " + sb.toString());
+		// return sb.toString();
+
+		String content = null;
+		try {
+			content = HtmlParser.parseHtml(url);
+		} catch (ParserException e) {
+			content = "";
 		}
-		log.info("content: " + sb.toString());
-		return sb.toString();
+		return content;
+
+		// StringBean sb = new StringBean();
+		// String encoding = sb.getConnection().getContentEncoding();
+		// log.info("encoding : " + encoding);
+		// if (encoding == null || encoding.equals("")) {
+		// encoding = "UTF-8";
+		// }
+		// sb.setLinks(false);
+		// sb.setReplaceNonBreakingSpaces(true);
+		// sb.setCollapse(true);
+		// sb.setURL(url);
+		// return sb.getStrings();
 	}
 }
