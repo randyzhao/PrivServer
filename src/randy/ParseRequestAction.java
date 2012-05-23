@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -108,10 +107,8 @@ public class ParseRequestAction extends ActionSupport {
 	 * @param url
 	 * @author Hongze Zhao
 	 * @throws IOException
-	 * @throws ClientProtocolException
 	 */
 	private void handleRequest(String username, String url) {
-		HttpClient client = new DefaultHttpClient();
 		try {
 			String content = this.getHttpContent(url);
 			List<String> words = this.analyzer.analyze(content);
@@ -125,10 +122,6 @@ public class ParseRequestAction extends ActionSupport {
 			}
 			userInfoDao.persistAllKeywordEntry(user);
 			userInfoDao.persist(user);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			log.error(e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			log.error(e.getMessage());
@@ -137,8 +130,7 @@ public class ParseRequestAction extends ActionSupport {
 
 	}
 
-	private String getHttpContent(String url) throws ClientProtocolException,
-			IOException {
+	private String getHttpContent(String url) throws IOException {
 		HttpClient client = new DefaultHttpClient();
 		HttpResponse res = client.execute(new HttpGet(url));
 		BufferedReader bf = new BufferedReader(new InputStreamReader(res
