@@ -9,7 +9,7 @@
   <property column="name" generated="never" lazy="false" name="name"
    not-null="true" type="string" unique="true"/>
   <property column="pwmd5" generated="never" lazy="false" name="pwmd5" type="string"/>
-  <bag lazy="true" name="keywords">
+  <bag lazy="true" name="keywords" cascade="save-update">
    <key column="userinfo_id"/>
    <one-to-many class="hibernate.bean.KeywordEntry"/>
   </bag>

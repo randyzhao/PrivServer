@@ -16,9 +16,6 @@ package hibernate.dao;
 
 import hibernate.HibernateSessionFactory;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.hibernate.Session;
 
 /**
@@ -41,17 +38,6 @@ public abstract class BaseDao {
 		Session s = this.getSession();
 		s.beginTransaction();
 		s.persist(obj);
-		s.getTransaction().commit();
-	}
-
-	public void persist(List<Object> objs) {
-		Session s = this.getSession();
-		s.beginTransaction();
-		Iterator<Object> obji = objs.iterator();
-		Object obj = null;
-		while ((obj = obji.next()) != null) {
-			s.persist(obj);
-		}
 		s.getTransaction().commit();
 	}
 

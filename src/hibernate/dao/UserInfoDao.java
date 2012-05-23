@@ -61,7 +61,13 @@ public class UserInfoDao extends BaseDao {
 	public void persistAllKeywordEntry(UserInfo user) {
 		KeywordEntryDao dao = new KeywordEntryDao();
 		List<KeywordEntry> entrys = user.getKeywords();
-		dao.persist(entrys);
+		log.info("persist " + entrys.size() + " words");
+		try {
+			dao.persistAll(entrys);
+		} catch (Exception ex) {
+			log.info(ex.getMessage());
+			ex.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {

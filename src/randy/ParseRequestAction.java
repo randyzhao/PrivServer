@@ -111,7 +111,6 @@ public class ParseRequestAction extends ActionSupport {
 	private void handleRequest(String username, String url) {
 		try {
 			String content = this.getHttpContent(url);
-			log.info(content);
 			List<String> words = this.analyzer.analyze(content);
 			log.info(words);
 			UserInfoDao userInfoDao = new UserInfoDao();
@@ -119,9 +118,11 @@ public class ParseRequestAction extends ActionSupport {
 			if (user == null) {
 				return;
 			}
+			log.info("get user " + username);
 			for (int i = 0; i < words.size(); i++) {
 				user.addKeyword(words.get(i));
 			}
+			log.info("finish adding " + words.size() + " keywords");
 			userInfoDao.persistAllKeywordEntry(user);
 			userInfoDao.persist(user);
 		} catch (IOException e) {
@@ -147,7 +148,7 @@ public class ParseRequestAction extends ActionSupport {
 
 		String content = null;
 		try {
-			content = HtmlParser.parseHtml(url);
+			content = HtmlParser.parseHTML(url);
 		} catch (ParserException e) {
 			content = "";
 		}
