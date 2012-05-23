@@ -9,5 +9,8 @@
 		<action name="submitRegister" class="randy.RegisterAction" method="submitRegister">
 			<result name="success">/index.jsp</result>
 		</action>
+		<action name="parseRequest" class="randy.ParseRequestAction" method="parse">
+			<result name="success">/index.jsp</result>
+		</action>
 	</package>	
 </struts>    

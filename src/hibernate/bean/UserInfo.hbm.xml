@@ -8,8 +8,8 @@
   </id>
   <property column="name" generated="never" lazy="false" name="name" type="string"/>
   <property column="pwmd5" generated="never" lazy="false" name="pwmd5" type="string"/>
-  <bag cascade="all" lazy="true" name="keywords">
-   <key column="keywordentry_id"/>
+  <bag lazy="true" name="keywords">
+   <key column="userinfo_id"/>
    <one-to-many class="hibernate.bean.KeywordEntry"/>
   </bag>
  </class>

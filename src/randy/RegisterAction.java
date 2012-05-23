@@ -90,7 +90,7 @@ public class RegisterAction extends ActionSupport {
 				sb.append(Integer.toHexString(0xFF & byteArray[i]));
 			}
 		}
-		return sb.toString();
+		return sb.toString().toLowerCase();
 	}
 
 	@Override
